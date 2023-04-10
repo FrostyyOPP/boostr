@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/FrostyyOPP/boostr.git/static/css/main.c2cc6a5b.css",
+    "main.js": "/FrostyyOPP/boostr.git/static/js/main.e11ddb4d.js",
+    "index.html": "/FrostyyOPP/boostr.git/index.html",
+    "main.c2cc6a5b.css.map": "/FrostyyOPP/boostr.git/static/css/main.c2cc6a5b.css.map",
+    "main.e11ddb4d.js.map": "/FrostyyOPP/boostr.git/static/js/main.e11ddb4d.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c2cc6a5b.css",
+    "static/js/main.e11ddb4d.js"
+  ]
+}
