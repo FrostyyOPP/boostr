@@ -7,10 +7,7 @@ import Box from "@mui/material/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import Button from "@mui/material/Button";
 import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
 
 const Header = () => {
@@ -58,23 +55,23 @@ const Header = () => {
         <div className="top-navbar">
           <List className="nav-items">
             <ListItem>
-              <a href="" className="nav-list-item">
+              <a href="/" className="nav-list-item">
                 Nav 1
               </a>
             </ListItem>
             <ListItem>
-              <a href="" className="nav-list-item">
+              <a href="/" className="nav-list-item">
                 Nav 1
               </a>
             </ListItem>
             <ListItem>
-              <a href="" className="nav-list-item">
+              <a href="/" className="nav-list-item">
                 Nav 1
               </a>
             </ListItem>
           </List>
         </div>
-        <div className="hamburger">
+        {/* <div className="hamburger">
           {["right"].map((anchor) => (
             <React.Fragment key={anchor}>
               <Button onClick={toggleDrawer(anchor, true)} className="ham-btn">
@@ -90,7 +87,7 @@ const Header = () => {
               </SwipeableDrawer>
             </React.Fragment>
           ))}
-        </div>
+        </div> */}
       </div>
       <div className="head-comp">
         <Head />

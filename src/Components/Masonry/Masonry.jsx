@@ -8,7 +8,6 @@ import IconButton from "@mui/material/IconButton";
 import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 import "./masonry.css";
 
-import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 const itemData = [
