@@ -1,0 +1,39 @@
+.top-container {
+  height: 30rem;
+  background: url(https://images.pexels.com/photos/14146735/pexels-photo-14146735.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
+    black;
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.header-container {
+  display: flex;
+  text-align: center;
+  justify-content: space-between;
+  margin-right: 2rem;
+  margin-left: 2rem;
+}
+.logo {
+  display: flex;
+  text-align: center;
+}
+.logo-img {
+  width: 6rem; /* 32px */
+}
+.nav-items {
+  display: flex;
+}
+
+.nav-list-item {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  margin-top: 1rem;
+  font-size: 1.25rem;
+}
+.head-comp {
+  display: flex;
+  justify-content: center;
+  margin-top: 5rem;
+}

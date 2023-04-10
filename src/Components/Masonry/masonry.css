@@ -1,0 +1,19 @@
+.mason-container {
+  margin: 2rem;
+}
+.mas-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.75rem;
+}
+.mas-head-title {
+  font-size: 1.75;
+  font-weight: 500;
+  text-align: center;
+}
+.data-img {
+}
+.img-body {
+  display: flex;
+  justify-content: space-around;
+}

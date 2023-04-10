@@ -1,0 +1,19 @@
+.category-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+.btn {
+  font-size: 1.05rem;
+  color: black;
+}
+/* .active-button {
+  background-color: black;
+  color: black;
+  border-radius: 20px;
+}
+.active-button:hover {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+} */
