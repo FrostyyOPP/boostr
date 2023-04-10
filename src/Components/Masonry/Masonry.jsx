@@ -1,77 +1,12 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
-
-import Tooltip from "@mui/material/Tooltip";
-import IconButton from "@mui/material/IconButton";
-import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
+import Pagination from "@mui/material/Pagination";
 import "./masonry.css";
-
 import TextField from "@mui/material/TextField";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
-const itemData = [
-  {
-    img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
-    title: "Breakfast",
-    clickBy: "Photographer Name on Unsplash",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
-    title: "Burger",
-    clickBy: "Photographer Name on Unsplash",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1522770179533-24471fcdba45",
-    title: "Camera",
-    clickBy: "Photographer Name on Unsplash",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c",
-    title: "Coffee",
-    clickBy: "Photographer Name on Unsplash",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1533827432537-70133748f5c8",
-    title: "Hats",
-    clickBy: "Photographer Name on Unsplash",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62",
-    title: "Honey",
-    clickBy: "Photographer Name on Unsplash",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1516802273409-68526ee1bdd6",
-    title: "Basketball",
-    clickBy: "Photographer Name on Unsplash",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1518756131217-31eb79b20e8f",
-    title: "Fern",
-    clickBy: "Photographer Name on Unsplash",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1597645587822-e99fa5d45d25",
-    title: "Mushrooms",
-    clickBy: "Photographer Name on Unsplash",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1567306301408-9b74779a11af",
-    title: "Tomato basil",
-    clickBy: "Photographer Name on Unsplash",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1471357674240-e1a485acb3e1",
-    title: "Sea star",
-    clickBy: "Photographer Name on Unsplash",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1589118949245-7d38baf380d6",
-    title: "Bike",
-    clickBy: "Photographer Name on Unsplash",
-  },
-];
+import { DownloadBtn } from "../DownloadBtn/DownloadBtn";
 
 const filters = [
   {
@@ -88,12 +23,56 @@ const filters = [
   },
 ];
 export const BasicMasonry = () => {
-  // const [filter, setFilter] = React.useState("");
-
   const filterOptions = createFilterOptions({
     matchFrom: "start",
     stringify: (option) => option.title,
   });
+
+  const [images, setImages] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const imagesPerPage = 10;
+  const totalImages = images.length;
+  const totalPages = Math.ceil(totalImages / imagesPerPage);
+
+  const indexOfLastImage = currentPage * imagesPerPage;
+  const indexOfFirstImage = indexOfLastImage - imagesPerPage;
+  const currentImages = images.slice(indexOfFirstImage, indexOfLastImage);
+
+  useEffect(() => {
+    // Set your access key and secret key
+    const accessKey = "hN5FEyWzF6fPqNocmq_bfupUrDsxrrYh1N-dB59uwrE";
+
+    // Define the API endpoint and query parameters
+    const apiUrl = "https://api.unsplash.com/photos";
+    const queryParams = `?client_id=${accessKey}&per_page=30`;
+
+    // Fetch the images from the API endpoint
+    fetch(apiUrl + queryParams)
+      .then((response) => {
+        // Check if the response was successful
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        // Parse the response as JSON
+        return response.json();
+      })
+      .then((data) => {
+        // Set the images state with the fetched data
+        setImages(data);
+      })
+      .catch((error) => {
+        // Handle any errors that occur during the fetch operation
+        console.error("Error fetching images:", error);
+      });
+  }, []);
+  const handlePageChange = (_, pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({
+      top: 400,
+      behavior: "smooth",
+    });
+  };
 
   return (
     <div className="mason-container">
@@ -114,36 +93,38 @@ export const BasicMasonry = () => {
       </div>
       <ImageList>
         <ImageListItem key="Subheader" cols={2}></ImageListItem>
-        {itemData.map((item) => (
-          <ImageListItem key={item.img}>
+
+        {currentImages.map((imageData) => (
+          <ImageListItem key={imageData.id}>
             <img
-              src={`${item.img}`}
-              srcSet={`${item.img}`}
-              alt={item.title}
+              src={`${imageData.urls.regular}`}
+              srcSet={`${imageData.urls.regular}`}
+              alt={imageData.alt_description}
               loading="lazy"
             />
             <ImageListItemBar
-              title={item.title}
-              subtitle={item.clickBy}
+              title={imageData.alt_description}
+              subtitle={imageData.user.first_name}
               actionIcon={
-                <Tooltip title="Download">
-                  <IconButton
-                    sx={{ color: "rgba(255, 255, 255, 0.54)" }}
-                    aria-label={`info about ${item.title}`}
-                  >
-                    <a href={item.img} download={item.title} target="blank">
-                      <DownloadForOfflineIcon
-                        fontSize="large"
-                        color="primary"
-                      />
-                    </a>
-                  </IconButton>
-                </Tooltip>
+                <DownloadBtn
+                  url={imageData.urls.full}
+                  fileName={imageData.alt_description}
+                />
               }
             />
           </ImageListItem>
         ))}
       </ImageList>
+      <Pagination
+        count={totalPages}
+        page={currentPage}
+        onChange={handlePageChange}
+        variant="outlined"
+        shape="rounded"
+        size="large"
+        color="primary"
+        style={{ marginTop: "2rem" }}
+      />
     </div>
   );
 };
