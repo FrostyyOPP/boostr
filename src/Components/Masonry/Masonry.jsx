@@ -45,7 +45,7 @@ export const BasicMasonry = () => {
 
     // Define the API endpoint and query parameters
     const apiUrl = "https://api.unsplash.com/photos";
-    const queryParams = `?client_id=${accessKey}&per_page=30`;
+    const queryParams = `?client_id=${accessKey}&per_page=50`;
 
     // Fetch the images from the API endpoint
     fetch(apiUrl + queryParams)
