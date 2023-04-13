@@ -4,29 +4,35 @@ import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
 import Pagination from "@mui/material/Pagination";
 import "./masonry.css";
-import TextField from "@mui/material/TextField";
-import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import { DownloadBtn } from "../DownloadBtn/DownloadBtn";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 const filters = [
   {
     title: "Trending",
+    value: "Trending",
   },
   {
     title: "New",
+    value: "New",
   },
   {
     title: "Dekstop",
+    value: "Desktop",
   },
   {
     title: "Mobile",
+    value: "Mobile",
   },
 ];
 export const BasicMasonry = () => {
-  const filterOptions = createFilterOptions({
-    matchFrom: "start",
-    stringify: (option) => option.title,
-  });
+  // const filterOptions = createFilterOptions({
+  //   matchFrom: "start",
+  //   stringify: (option) => option.title,
+  // });
 
   const [images, setImages] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -38,34 +44,32 @@ export const BasicMasonry = () => {
   const indexOfLastImage = currentPage * imagesPerPage;
   const indexOfFirstImage = indexOfLastImage - imagesPerPage;
   const currentImages = images.slice(indexOfFirstImage, indexOfLastImage);
-
+  const [query, setQuery] = useState("new");
   useEffect(() => {
-    // Set your access key and secret key
-    const accessKey = "hN5FEyWzF6fPqNocmq_bfupUrDsxrrYh1N-dB59uwrE";
-
-    // Define the API endpoint and query parameters
-    const apiUrl = "https://api.unsplash.com/photos";
-    const queryParams = `?client_id=${accessKey}&per_page=50`;
-
-    // Fetch the images from the API endpoint
-    fetch(apiUrl + queryParams)
-      .then((response) => {
-        // Check if the response was successful
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
+    const fetchPhotos = async () => {
+      const response = await fetch(
+        `https://api.pexels.com/v1/search?query=${query}&page=${totalPages}&per_page=80`,
+        {
+          headers: {
+            Authorization:
+              "563492ad6f917000010000013b998ff6ad0249dba3fe3ea53d5c58f3",
+          },
         }
-        // Parse the response as JSON
-        return response.json();
-      })
-      .then((data) => {
-        // Set the images state with the fetched data
-        setImages(data);
-      })
-      .catch((error) => {
-        // Handle any errors that occur during the fetch operation
-        console.error("Error fetching images:", error);
-      });
-  }, []);
+      );
+      const data = await response.json();
+      setImages((prevPhotos) => [...prevPhotos, ...data.photos]);
+    };
+    fetchPhotos();
+  }, [query]);
+  const handleChange = (e) => {
+    e.preventDefault();
+    setQuery(e.target.value);
+  };
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setQuery(e.target.search.value);
+  };
+
   const handlePageChange = (_, pageNumber) => {
     setCurrentPage(pageNumber);
     window.scrollTo({
@@ -77,18 +81,22 @@ export const BasicMasonry = () => {
   return (
     <div className="mason-container">
       <div className="mas-head">
-        <h1 className="mas-head-title">Free Stock Photos</h1>
+        <h1 className="mas-head-title">Free {query} Photos</h1>
         <div className="select-box">
-          <Autocomplete
-            id="filter-demo"
-            options={filters}
-            getOptionLabel={(option) => option.title}
-            filterOptions={filterOptions}
-            sx={{ width: 200 }}
-            renderInput={(params) => (
-              <TextField {...params} label="Custom filter" />
-            )}
-          />
+          <FormControl>
+            <InputLabel id="demo-simple-select-label">Filter</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={query}
+              label="Age"
+              onChange={handleChange}
+            >
+              {filters.map((filter) => (
+                <MenuItem value={filter.value}>{filter.title}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </div>
       </div>
       <ImageList>
@@ -97,18 +105,18 @@ export const BasicMasonry = () => {
         {currentImages.map((imageData) => (
           <ImageListItem key={imageData.id}>
             <img
-              src={`${imageData.urls.regular}`}
-              srcSet={`${imageData.urls.regular}`}
-              alt={imageData.alt_description}
+              src={`${imageData.src.original}`}
+              srcSet={`${imageData.src.original}`}
+              alt={imageData.alt}
               loading="lazy"
             />
             <ImageListItemBar
-              title={imageData.alt_description}
-              subtitle={imageData.user.first_name}
+              title={imageData.alt}
+              subtitle={imageData.photographer}
               actionIcon={
                 <DownloadBtn
-                  url={imageData.urls.full}
-                  fileName={imageData.alt_description}
+                  url={imageData.src.original}
+                  fileName={imageData.alt}
                 />
               }
             />
